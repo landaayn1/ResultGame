@@ -9,11 +9,17 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    dice.cpp \
+    gameboard.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    token.cpp
 
 HEADERS += \
-    mainwindow.h
+    dice.h \
+    gameboard.h \
+    mainwindow.h \
+    token.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
