@@ -5,9 +5,7 @@
 
 class Dice {
 public:
-    int roll() {
-        return QRandomGenerator::global()->bounded(1, 7);
-    }
+    int roll();
 };
 
 #endif // DICE_H
