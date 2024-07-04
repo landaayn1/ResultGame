@@ -38,6 +38,13 @@ void MainWindow::newGame() {
     m_currentPlayer = 1;
     m_stepsRemaining = 0;
     update();
+    m_initialPosition1 = 0;
+    m_initialPosition2 = 0;
+    newPosition = 0;
+    newPosition1 = 0;
+    finishPosition = 0;
+    finishPosition1 = 0;
+    m_diceRoll = 0;
 }
 
 void MainWindow::rulesTriggered() {
@@ -141,8 +148,10 @@ void MainWindow::rollDice() {
 
     if (m_currentPlayer == 1) {
         m_stepsRemaining = m_diceRoll;
+        finishPosition = m_initialPosition1 + m_diceRoll;
     } else {
         m_stepsRemaining = m_diceRoll;
+        finishPosition1 = m_initialPosition2 + m_diceRoll;
     }
 
     m_animationTimer->start(500); // Start the animation with a 500ms interval
@@ -151,11 +160,45 @@ void MainWindow::rollDice() {
 void MainWindow::moveTokens() {
     if (m_stepsRemaining > 0) {
         if (m_currentPlayer == 1) {
-            m_token1.move(1);
+            newPosition = m_token1.position() + 1;
+            if ((newPosition == finishPosition && finishPosition == 4) || (newPosition == finishPosition && finishPosition == 13) || (newPosition == finishPosition && finishPosition == 23) || (newPosition == finishPosition && finishPosition == 32)) {
+                // Двигаемся на две клетки вперед
+                m_token1.setPosition(newPosition + 2);
+                m_stepsRemaining--;
+            } else if ((newPosition == finishPosition && finishPosition == 8) || (newPosition == finishPosition && finishPosition == 17) || (newPosition == finishPosition && finishPosition == 27)) {
+                // Двигаемся на три клетки назад
+                m_token1.setPosition(newPosition - 3);
+                m_stepsRemaining--;
+            } else if ((newPosition == finishPosition && finishPosition == 20) || (newPosition == finishPosition && finishPosition == 30)) {
+                // Перемещаемся в начало
+                m_token1.reset();
+                m_stepsRemaining--;
+            } else {
+                m_token1.move(1);
+                m_stepsRemaining--;
+            }
         } else {
-            m_token2.move(1);
+            newPosition1 = m_token2.position() + 1;
+            if ((newPosition1 == finishPosition1 && finishPosition1 == 4) || (newPosition1 == finishPosition1 && finishPosition1 == 13) || (newPosition1 == finishPosition1 && finishPosition1 == 23) || (newPosition1 == finishPosition1 && finishPosition1 == 32)) {
+                // Двигаемся на две клетки вперед
+                m_token2.setPosition(newPosition1 + 2);
+                m_stepsRemaining--;
+            } else if ((newPosition1 == finishPosition1 && finishPosition1 == 8) || (newPosition1 == finishPosition1 && finishPosition1 == 17) || (newPosition1 == finishPosition1 && finishPosition1 == 27)) {
+                // Двигаемся на три клетки назад
+                m_token2.setPosition(newPosition1 - 3);
+                m_stepsRemaining--;
+            } else if ((newPosition1 == finishPosition1 && finishPosition1 == 20) || (newPosition1 == finishPosition1 && finishPosition1 == 30)) {
+                // Перемещаемся в начало
+                m_token2.reset();
+                m_stepsRemaining--;
+            } else {
+                m_token2.move(1);
+                m_stepsRemaining--;
+            }
         }
-        m_stepsRemaining--;
+        m_initialPosition1 = m_token1.position();
+        m_initialPosition2 = m_token2.position();
+        qDebug() << m_token1.position();
         update();
     } else {
         m_animationTimer->stop();
